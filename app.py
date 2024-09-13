@@ -9,14 +9,20 @@ def index():
     answer = None
     if request.method == 'POST':
         username = request.form['username']
-        username = str(username)
         mapid = request.form['usermap']
-        mapid = int(mapid)
-        answer = most_played(username_user=username,beatmap_id=mapid)
+        if len(username) > 1 and len(mapid) > 1:
+            username = str(username)
+            mapid = int(mapid)
+            answer = most_played(username_user=username,beatmap_id=mapid)
+        else:
+            answer = 'Error either Username or Beatmap ID is invalid!'
+
+    
+    return render_template('index.html',answer=answer)
         
 
         
-    return render_template('index.html',answer=answer)
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

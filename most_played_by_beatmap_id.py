@@ -11,24 +11,26 @@ def most_played(username_user,beatmap_id):
     api = Ossapi(client_id,client_secret)
     try:
         user = api.user(username_user, key=UserLookupKey.USERNAME)
+        play_count = api.user(username_user, key=UserLookupKey.USERNAME).beatmap_playcounts_count
     except:
         return "User Not Found"
     try:
         user_info = api.user_beatmaps(user_id=user.id,type="most_played",limit=100, offset=0)
     except:
         return "beatmap ID does Not Exist"
-        
+    print(user.id)
     search = True
     user_info = api.user_beatmaps(user_id=user.id,type="most_played",limit=100, offset=0)
+
 
 
 
     i = 0 
     z = 0
     while search:
-        if z+i > 1000:
+        if z+i > min(play_count-1,2000):
             search = False
-            return (f'In order for it to not take long, I limited it to top 1000 most played, most likely {username_user} has played this map 1 or 2 times or not at all')
+            return (f'In order for it to not take long, I limited it to top 2000 most played, most likely {username_user} has played this map 1 or 2 times or not at all')
 
         if i == 50:
             i = 0
